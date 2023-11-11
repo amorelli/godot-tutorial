@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=3 uid="uid://5dwyhbdweqta"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_jn40r"]
+[ext_resource type="PackedScene" uid="uid://c5atwh5vlqasw" path="res://mob.tscn" id="2_5kk4b"]
+[ext_resource type="PackedScene" uid="uid://bbppcbnomb27k" path="res://player.tscn" id="3_elhkb"]
+[ext_resource type="PackedScene" uid="uid://c4lvnvpoc3cml" path="res://hud.tscn" id="4_6shga"]
+[ext_resource type="AudioStream" uid="uid://473a2s4itoca" path="res://art/house-in-a-forest-loop.ogg" id="5_fc032"]
+[ext_resource type="AudioStream" uid="uid://bo740nymos4qw" path="res://art/game-over.wav" id="6_ux28l"]
+
+[sub_resource type="Curve2D" id="Curve2D_o12cb"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 480, 0, 0, 0, 0, 0, 480, 720, 0, 0, 0, 0, 0, 720, 0, 0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[node name="Main" type="Node"]
+script = ExtResource("1_jn40r")
+mob_scene = ExtResource("2_5kk4b")
+
+[node name="Player" parent="." instance=ExtResource("3_elhkb")]
+position = Vector2(-160, 320)
+
+[node name="MobTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="MobPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_o12cb")
+
+[node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath"]
+
+[node name="HUD" parent="." instance=ExtResource("4_6shga")]
+
+[node name="ScoreTimer" type="Timer" parent="."]
+
+[node name="StartTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="StartPosition" type="Marker2D" parent="."]
+position = Vector2(240, 320)
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_fc032")
+
+[node name="DeathSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_ux28l")
+
+[connection signal="hit" from="Player" to="." method="game_over"]
+[connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
+[connection signal="start_game" from="HUD" to="." method="new_game"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]

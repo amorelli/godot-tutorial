@@ -17,6 +17,12 @@ This is the starter project for the video version of the tutorial published on t
 config/features=PackedStringArray("4.1")
 config/icon="res://icon.png"
 
+[display]
+
+window/size/viewport_width=480
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+
 [input]
 
 move_right={
